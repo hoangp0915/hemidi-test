@@ -1,0 +1,71 @@
+<cds-modal [open]="open" (overlaySelected)="closeModal()" size="sm">
+    <cds-modal-header (closeSelect)="closeModal()">Add a new question</cds-modal-header>
+    <form
+        class="cds--modal-content"
+        [formGroup]="formGroup"
+        (ngSubmit)="handleSubmit()"
+        #ngForm="ngForm"
+    >
+        <cds-dropdown (selected)="handleTypeChange($any($event))">
+            <cds-dropdown-list [items]="questionTypeOptions"></cds-dropdown-list>
+        </cds-dropdown>
+        <cds-text-label
+            [invalid]="questionCtrl.invalid && (questionCtrl.touched || ngForm.submitted)"
+            class="required"
+        >
+            Question
+            <input
+                cdsText
+                type="text"
+                class="input-field"
+                placeholder="Type question here"
+                formControlName="question"
+            />
+        </cds-text-label>
+
+        @if (typeCtrl.value === questionTypeEnum.CHECKBOX) {
+            <div class="answer-options" formArrayName="options" @expansionAnimationIf>
+                @for (control of optionsCtrl.controls; track $index) {
+                    <cds-text-label
+                        [invalid]="control.invalid && (control.touched || ngForm.submitted)"
+                        class="required"
+                        @expansionAnimationIf
+                    >
+                        Answer option #{{ $index + 1 }}
+                        <input
+                            cdsText
+                            type="text"
+                            class="input-field"
+                            [formControlName]="$index"
+                            placeholder="Add answer option"
+                        />
+                    </cds-text-label>
+                }
+            </div>
+
+            <button
+                cdsButton="ghost"
+                type="button"
+                class="addAnotherAnswerBtn"
+                (click)="addAnswerOption()"
+                [disabled]="!isEnableAddOption"
+            >
+                <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
+                Add another answer
+            </button>
+        }
+
+        <cds-checkbox
+            formControlName="allowOtherAnswer"
+            *ngIf="typeCtrl.value === questionTypeEnum.CHECKBOX"
+        >
+            Allow user to specify own answer
+        </cds-checkbox>
+        <cds-checkbox formControlName="required">This field is required</cds-checkbox>
+
+        <button class="submit" cdsButton type="submit">
+            Submit
+            <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
+        </button>
+    </form>
+</cds-modal>

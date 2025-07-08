@@ -1,0 +1,24 @@
+.cds--modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 75svh;
+    height: fit-content;
+    overflow: auto;
+    padding: 8px 16px !important;
+
+    .answer-options {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .addAnotherAnswerBtn {
+        padding: 4px !important;
+        min-block-size: 0 !important;
+    }
+
+    .submit {
+        place-self: end;
+    }
+}

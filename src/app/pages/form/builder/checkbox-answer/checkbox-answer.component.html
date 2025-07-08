@@ -1,0 +1,36 @@
+<fieldset class="cds--fieldset">
+    <legend class="cds--label" [ngClass]="{ required: question().required }">
+        {{ question().question }}
+    </legend>
+    @for (option of answerOptions; track $index) {
+        <cds-checkbox
+            [(checked)]="option.checked"
+            (checkedChange)="handleAnswerChange()"
+            [class.invalid]="invalid() && !allowOtherAnswer"
+        >
+            {{ option.value }}
+        </cds-checkbox>
+    }
+    @if (question().allowOtherAnswer) {
+        <cds-checkbox
+            [checked]="allowOtherAnswer"
+            (checkedChange)="handleAllowOtherAnswer($event)"
+            [class.invalid]="invalid() && !allowOtherAnswer"
+        >
+            Other
+        </cds-checkbox>
+
+        @if (allowOtherAnswer) {
+            <cds-text-label @expansionAnimationIf [invalid]="allowOtherAnswer && invalid()">
+                <input
+                    cdsText
+                    type="text"
+                    class="input-field"
+                    placeholder="Enter other answer..."
+                    [ngModel]="otherAnswer"
+                    (ngModelChange)="handleOtherAnswerChange($event)"
+                />
+            </cds-text-label>
+        }
+    }
+</fieldset>

@@ -1,0 +1,16 @@
+<section class="answers-container">
+    @if (list.length) {
+        <div class="answers">
+            <div class="answer" *ngFor="let item of list">
+                <p class="answer__title cds--label">{{ item.question }}</p>
+                <span class="answer__result cds--label" *ngFor="let answer of item.answers">
+                    {{ answer }}
+                </span>
+            </div>
+        </div>
+    } @else {
+        <p>No answer found!</p>
+    }
+
+    <a routerLink="/form/builder" cdsLink>Back to Forms Builder</a>
+</section>

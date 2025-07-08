@@ -1,0 +1,73 @@
+<section class="builder-container">
+    @if (!answersCtrl.length) {
+        <p>No question found!</p>
+        <button class="add-question-btn" cdsButton type="button" (click)="openAddQuestion()">
+            Add Question
+            <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
+        </button>
+    } @else {
+        <form
+            class="builder-form"
+            [formGroup]="formGroup"
+            (ngSubmit)="handleSubmit()"
+            #ngForm="ngForm"
+        >
+            <ng-container formArrayName="answers">
+                @for (item of answersCtrl.controls; track $index) {
+                    <ng-container
+                        *ngIf="item.get('question')?.value; let question"
+                        [formGroupName]="$index"
+                    >
+                        @switch (question.type) {
+                            @case (questionEnum.CHECKBOX) {
+                                <hmd-checkbox-answer
+                                    [question]="question"
+                                    formControlName="answer"
+                                    [invalid]="
+                                        (!!item.get('answer')?.touched || ngForm.submitted) &&
+                                        !!item.get('answer')?.invalid
+                                    "
+                                />
+                            }
+                            @default {
+                                <cds-text-label
+                                    labelClass
+                                    [invalid]="
+                                        (!!item.get('answer')?.touched || ngForm.submitted) &&
+                                        !!item.get('answer')?.invalid
+                                    "
+                                    [ngClass]="{ required: question.required }"
+                                >
+                                    {{ question.question }}
+                                    <input
+                                        cdsText
+                                        type="text"
+                                        class="input-field"
+                                        placeholder="Enter..."
+                                        formControlName="answer"
+                                    />
+                                </cds-text-label>
+                            }
+                        }
+                    </ng-container>
+                }
+            </ng-container>
+            <button
+                cdsButton="ghost"
+                class="addNewQuestionBtn"
+                type="button"
+                (click)="openAddQuestion()"
+            >
+                <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
+                Add New Question
+            </button>
+
+            <button cdsButton="tertiary" class="reviewAnswersBtn" type="submit">
+                Review my answers
+                <svg class="cds--btn__icon" cdsIcon="chevron--right" size="16"></svg>
+            </button>
+        </form>
+    }
+</section>
+
+<cds-placeholder></cds-placeholder>
